@@ -1,9 +1,9 @@
 
 const Login = () => {
     return (
-        <div>
+        <section>
             
-        </div>
+        </section>
     );
 };
 

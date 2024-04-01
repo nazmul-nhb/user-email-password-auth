@@ -10,7 +10,7 @@ const Navbar = () => {
 
     return (
         <nav className="flex justify-between">
-            <div><h3 className="text-2xl font-semibold">Email Password Authentication</h3></div>
+            <div><h3 className="text-2xl font-semibold">Email Authentication</h3></div>
             <div>
                 <ul className="flex justify-center gap-6 font-medium">
                     {navLinks}

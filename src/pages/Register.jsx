@@ -1,4 +1,4 @@
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, sendEmailVerification, updateProfile } from "firebase/auth";
 import auth from "../firebase.config";
 import { useState } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
@@ -12,6 +12,7 @@ const Register = () => {
 
     const handleRegister = (e) => {
         e.preventDefault();
+        const name = e.target.name.value;
         const email = e.target.email.value;
         const password = e.target.password.value;
         const accepted = e.target.terms.checked;
@@ -36,7 +37,24 @@ const Register = () => {
         createUserWithEmailAndPassword(auth, email, password)
             .then(result => {
                 console.log(result.user);
-                setSuccess('User Created Successfully!')
+                setSuccess('User Created Successfully!');
+
+                // update profile
+                updateProfile(result.user, {
+                    displayName: name,
+                })
+                .then(() => {
+                    alert("Profile Updated")
+                })
+                .catch(error => {
+                    setRegisterError(error);
+                })
+
+                // send verification email
+                sendEmailVerification(result.user)
+                .then(() => {
+                    alert('Please, check your email and verify it')
+                })
             })
             .catch(error => {
                 setRegisterError(error.message);
@@ -48,6 +66,7 @@ const Register = () => {
         <section className="space-y-6 flex flex-col justify-center items-center mt-8">
             <h2 className="text-2xl font-medium">Please, Register</h2>
             <form onSubmit={handleRegister} className="flex flex-col gap-6">
+                <input className="input border border-red-950" type="text" name="name" placeholder="Your Name" required />
                 <input className="input border border-red-950" type="email" name="email" placeholder="Your Email" required />
                 <div className="relative">
                     <input className="input w-full border border-red-950" type={showPassword ? "text" : "password"} name="password" placeholder="Your Password" required />
